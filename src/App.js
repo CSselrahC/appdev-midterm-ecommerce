@@ -7,7 +7,7 @@ import NavBar from './components/NavBar';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import ProductDetails from './components/ProductDetails';
-import Checkout from './components/Checkout'; // ✅ Added import for Checkout
+import Checkout from './components/Checkout';
 
 
 function App() {
@@ -41,11 +41,9 @@ function App() {
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
             <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
             <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
-            <Route path="/checkout" element={<Checkout />} /> {/* ✅ Defined properly */}
+            <Route path="/checkout" element={<Checkout />} />
           </Routes>
         </main>
-
-        <Footer />
       </div>
     </Router>
   );
