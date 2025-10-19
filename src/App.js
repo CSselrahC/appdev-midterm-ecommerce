@@ -5,7 +5,7 @@ import './App.css';
 function Home() {
   return (
     <div>
-      <h1>🐳 Docker React App</h1>
+      <h1>🐳 Ecommerce</h1>
       <p>Welcome to your Dockerized React application!</p>
       <p>This app is running in a Docker container with hot reload enabled.</p>
     </div>
