@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ProductDetails from './ProductDetails';
 
 function ProductList({ addToCart }) {
     const products = [
-        { id: 1, name: 'Product 1', price: 10.00 },
-        { id: 2, name: 'Product 2', price: 20.00 },
-        { id: 3, name: 'Product 3', price: 30.00 },
-        { id: 4, name: 'Product 4', price: 20.00 },
-        { id: 5, name: 'Product 5', price: 30.00 }
+        { id: 1, name: 'Product 1', description: "nice product", price: 10.00 },
+        { id: 2, name: 'Product 2', description: "another nice product", price: 20.00 },
+        { id: 3, name: 'Product 3', description: "yet another nice product", price: 30.00 },
+        { id: 4, name: 'Product 4', description: "nice product", price: 20.00 },
+        { id: 5, name: 'Product 5', description: "nice product", price: 30.00 }
     ];
 
     const handleAddToCart = (product) => {
@@ -23,7 +24,11 @@ function ProductList({ addToCart }) {
             <ul>
                 {products.map(product => (
                     <li key={product.id}>
-                        {product.name} - ₱{product.price.toFixed(2)}
+                        <ProductDetails
+                            name={product.name}
+                            description={product.description}
+                            price={product.price}
+                        />
                         <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
                     </li>
                 ))}
