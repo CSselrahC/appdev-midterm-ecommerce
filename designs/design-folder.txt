@@ -1,0 +1,1 @@
+this folder should contain Figma links and images about the UI of the app
