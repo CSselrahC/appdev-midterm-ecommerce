@@ -6,18 +6,21 @@ import NavBar from './components/NavBar';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import ProductDetails from './components/ProductDetails';
+import Checkout from './components/Checkout'; // ✅ Added import for Checkout
+
 
 function App() {
-  useEffect(() => { document.title = "Docker Motorsports"; }, []);
+  useEffect(() => {
+    document.title = "Docker Motorsports";
+  }, []);
 
   const [cart, setCart] = useState([]);
 
+  // Add or update product in the cart
   const addToCart = (productToAdd) => {
-    // Check if the product is already in the cart
     const existingProduct = cart.find(item => item.id === productToAdd.id);
 
     if (existingProduct) {
-      // If it exists, update the quantity
       setCart(
         cart.map(item =>
           item.id === productToAdd.id
@@ -26,9 +29,9 @@ function App() {
         )
       );
     } else {
-      // If it's a new product, add it to the cart with a quantity of 1
       setCart([...cart, { ...productToAdd, quantity: 1 }]);
     }
+
     console.log(`Added ${productToAdd.name} to cart. Current cart size: ${cart.length + 1}`);
   };
 
@@ -41,15 +44,18 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
-            <Route path="/cart" element={<Cart cart={cart} />} />
             <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
+            <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
+            <Route path="/checkout" element={<Checkout />} /> {/* ✅ Defined properly */}
           </Routes>
         </main>
+
+        <Footer />
       </div>
-      <Footer />
     </Router>
   );
 
+  // Footer Component
   function Footer() {
     return (
       <footer
@@ -63,7 +69,7 @@ function App() {
           <p className="mb-0 fw-semibold" style={{ color: '#bbb', letterSpacing: '0.5px' }}>
             © 2025 <span style={{ color: '#61dafb' }}>Docker Motorsports</span> | Created with React & Bootstrap
           </p>
-          <p className="mb-0 fw-semibold" style={{ color: '#bbb', letterSpacing: '0.5px' }} >
+          <p className="mb-0 fw-semibold" style={{ color: '#bbb', letterSpacing: '0.5px' }}>
             Contact: CSselrahC | cntaxc
           </p>
         </div>
