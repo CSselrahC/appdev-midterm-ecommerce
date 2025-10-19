@@ -7,6 +7,8 @@ import NavBar from './components/NavBar';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import ProductDetails from './components/ProductDetails';
+import Checkout from './components/Checkout'; // ✅ Added import for Checkout
+
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -26,6 +28,7 @@ function App() {
     } else {
       setCart([...cart, { ...productToAdd, quantity: 1 }]);
     }
+
   };
 
   return (
@@ -36,10 +39,13 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
-            <Route path="/cart" element={<Cart cart={cart} />} />
             <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
+            <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
+            <Route path="/checkout" element={<Checkout />} /> {/* ✅ Defined properly */}
           </Routes>
         </main>
+
+        <Footer />
       </div>
     </Router>
   );

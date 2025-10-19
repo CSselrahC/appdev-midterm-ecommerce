@@ -1,9 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function Cart({ cart = [] }) {
+function Cart({ cart, setCart }) {
+  const navigate = useNavigate();
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+  const handleCheckout = () => {
+    navigate("/checkout", { state: { cart } }); // sends state to Checkout.js
+  };
+
   return (
+
     <div className="container mt-4">
       <h2>Shopping Cart</h2>
       {cart.length === 0 ? (
@@ -17,7 +24,11 @@ function Cart({ cart = [] }) {
           ))}
         </ul>
       )}
+
       <h3 className="mt-3">Total: ₱{total.toFixed(2)}</h3>
+      {cart.length > 0 && (
+        <button onClick={handleCheckout}>Proceed to Checkout</button>
+      )}
     </div>
   );
 }
