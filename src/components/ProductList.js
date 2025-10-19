@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ProductDetails from './ProductDetails';
 
 function ProductList({ addToCart }) {
     const products = [
@@ -24,18 +23,20 @@ function ProductList({ addToCart }) {
             <ul>
                 {products.map(product => (
                     <li key={product.id}>
-                        <ProductDetails
-                            name={product.name}
-                            description={product.description}
-                            price={product.price}
-                        />
-                        <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
+                        <p>
+                            <strong>{product.name}</strong>
+                            <br />
+                            Price: ₱{product.price.toFixed(2)}
+                            <br />
+                            <Link to={`/product/${product.id}`} className="view-product-link">View Product</Link>
+                        </p>
+                        <button onClick={() => handleAddToCart(product)}>Add to Cart (Quick)</button>
                     </li>
                 ))}
             </ul>
 
             <br></br>
-            <Link to="/cart" className="nav-link">Cart</Link>
+            <Link to="/cart" className="nav-link">View Cart</Link>
         </div>
     );
 }
