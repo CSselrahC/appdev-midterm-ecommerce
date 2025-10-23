@@ -1,15 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import products from '../data/products.json';
 
 function ProductList({ addToCart }) {
-  const products = [
-    { id: 1, name: 'Product 1', description: "nice product", price: 10.00 },
-    { id: 2, name: 'Product 2', description: "another nice product", price: 20.00 },
-    { id: 3, name: 'Product 3', description: "yet another nice product", price: 30.00 },
-    { id: 4, name: 'Product 4', description: "nice product", price: 20.00 },
-    { id: 5, name: 'Product 5', description: "nice product", price: 30.00 }
-  ];
-
   const handleAddToCart = (product) => {
     if (addToCart) addToCart(product);
   };
