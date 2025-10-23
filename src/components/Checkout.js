@@ -55,6 +55,8 @@ function Checkout({ setCart }) {
               ))}
             </tbody>
           </table>
+          <h2>Price: ₱{boughtTotal.toFixed(2)}</h2>
+          <h2>Discount: ₱0</h2>
           <h2>Total Price: ₱{boughtTotal.toFixed(2)}</h2>
           <div style={{ marginTop: '20px' }}>
             <Link to="/">
