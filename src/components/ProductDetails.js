@@ -1,18 +1,11 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-
-const productsData = [
-  { id: 1, name: 'Product 1', description: "A high-performance tire for track days.", price: 10.00 },
-  { id: 2, name: 'Product 2', description: "Adjustable coil-over suspension kit.", price: 20.00 },
-  { id: 3, name: 'Product 3', description: "Limited edition Diecast Model Car.", price: 30.00 },
-  { id: 4, name: 'Product 4', description: "High-flow air intake system.", price: 20.00 },
-  { id: 5, name: 'Product 5', description: "Brembo brake kit upgrade.", price: 30.00 }
-];
+import products from '../data/products.json';
 
 function ProductDetails({ addToCart }) {
   const { id } = useParams();
   const productId = parseInt(id);
-  const product = productsData.find(p => p.id === productId);
+  const product = products.find(p => p.id === productId);
 
   if (!product) return <div>Product not found for ID: {id}</div>;
 
