@@ -9,7 +9,6 @@ import Cart from './components/Cart';
 import ProductDetails from './components/ProductDetails';
 import Checkout from './components/Checkout';
 
-
 function App() {
   const [cart, setCart] = useState([]);
 
@@ -28,7 +27,6 @@ function App() {
     } else {
       setCart([...cart, { ...productToAdd, quantity: 1 }]);
     }
-
   };
 
   return (
@@ -40,8 +38,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
             <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
-            <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
-            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/cart" element={<Cart cart={cart} />} />
+            <Route path="/checkout" element={<Checkout setCart={setCart} />} />
           </Routes>
         </main>
       </div>

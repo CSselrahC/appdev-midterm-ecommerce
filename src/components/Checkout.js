@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 
-function Checkout() {
+function Checkout({ setCart }) {
   const { state } = useLocation();
   const cartList = state?.cart || [];
-
   const [purchased, setPurchased] = useState(false);
+  const [boughtList, setBoughtList] = useState([]);
 
-  // Calculate the total price (Sum of price per quantity)
   const total = cartList.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const boughtTotal = boughtList.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleBuyProduct = () => {
+    setBoughtList(cartList); // Store a snapshot before clearing
     setPurchased(true);
+    setCart([]); // Empties the cart after purchase
   };
 
   return (
     <div style={{ margin: '20px' }}>
       <h1>Checkout</h1>
 
-      {cartList.length === 0 ? (
+      {cartList.length === 0 && !purchased ? (
         <p>No items in your cart.</p>
       ) : purchased ? (
         <div>
@@ -43,7 +45,7 @@ function Checkout() {
               </tr>
             </thead>
             <tbody>
-              {cartList.map(item => (
+              {boughtList.map(item => (
                 <tr key={item.id}>
                   <td>{item.name}</td>
                   <td>₱{item.price.toFixed(2)}</td>
@@ -53,8 +55,7 @@ function Checkout() {
               ))}
             </tbody>
           </table>
-          <h2>Total Price: ₱{total.toFixed(2)}</h2>
-
+          <h2>Total Price: ₱{boughtTotal.toFixed(2)}</h2>
           <div style={{ marginTop: '20px' }}>
             <Link to="/">
               <button style={{ padding: '10px 15px', cursor: 'pointer' }}>
@@ -94,16 +95,13 @@ function Checkout() {
               ))}
             </tbody>
           </table>
-
           <h2>Total Price: ₱{total.toFixed(2)}</h2>
-
           <div style={{ marginTop: '20px' }}>
             <Link to="/">
               <button style={{ padding: '10px 15px', cursor: 'pointer', marginRight: '10px' }}>
                 Return Home
               </button>
             </Link>
-
             <button
               onClick={handleBuyProduct}
               style={{ padding: '10px 15px', cursor: 'pointer' }}
