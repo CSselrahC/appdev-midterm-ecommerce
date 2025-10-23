@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 
-function Checkout({ setCart }) {
-  const { state } = useLocation();
-  const cartList = state?.cart || [];
+function Checkout({ cart, setCart, onTransaction }) {
   const [purchased, setPurchased] = useState(false);
   const [boughtList, setBoughtList] = useState([]);
 
-  const total = cartList.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  // Discount fixed at 0 for now. Can be changed
+  const discount = 0;
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const boughtTotal = boughtList.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleBuyProduct = () => {
-    setBoughtList(cartList); // Store a snapshot before clearing
+    setBoughtList(cart); // Store a snapshot before clearing
     setPurchased(true);
     setCart([]); // Empties the cart after purchase
+    if (onTransaction) {
+      onTransaction(cart, discount);
+    }
   };
 
   return (
     <div style={{ margin: '20px' }}>
       <h1>Checkout</h1>
 
-      {cartList.length === 0 && !purchased ? (
+      {cart.length === 0 && !purchased ? (
         <p>No items in your cart.</p>
       ) : purchased ? (
         <div>
@@ -56,8 +59,8 @@ function Checkout({ setCart }) {
             </tbody>
           </table>
           <h2>Price: ₱{boughtTotal.toFixed(2)}</h2>
-          <h2>Discount: ₱0</h2>
-          <h2>Total Price: ₱{boughtTotal.toFixed(2)}</h2>
+          <h2>Discount: ₱{discount}</h2>
+          <h2>Total Price: ₱{(boughtTotal - discount).toFixed(2)}</h2>
           <div style={{ marginTop: '20px' }}>
             <Link to="/">
               <button style={{ padding: '10px 15px', cursor: 'pointer' }}>
@@ -87,7 +90,7 @@ function Checkout({ setCart }) {
               </tr>
             </thead>
             <tbody>
-              {cartList.map(item => (
+              {cart.map(item => (
                 <tr key={item.id}>
                   <td>{item.name}</td>
                   <td>₱{item.price.toFixed(2)}</td>

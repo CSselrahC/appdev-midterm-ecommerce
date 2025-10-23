@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 function HomePage() {
   return (
     <div className="text-center">
+      <Link to="/user" className="btn btn-primary mt-2">User</Link>
       <h1 className="fw-bold mt-4">🚗 Docker Motorsports</h1>
       <p>Your one-stop shop for tires, suspensions, diecast cars, and everything motorsports!</p>
       <p>Browse our latest products now!</p>

@@ -8,9 +8,15 @@ import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import ProductDetails from './components/ProductDetails';
 import Checkout from './components/Checkout';
+import User from './components/User';
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  // User details in state
+  const [userName, setUserName] = useState("Cagayan");
+  const [paymentMethod, setPaymentMethod] = useState("GCash");
+  const [deliveryAddress, setDeliveryAddress] = useState("dyan sa may kanto");
 
   useEffect(() => {
     document.title = "Docker Motorsports";
@@ -29,6 +35,26 @@ function App() {
     }
   };
 
+  const handleTransaction = (orderItems, discount = 0) => {
+    const orderNumber = transactions.length + 1;
+    const price = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = price - discount;
+    const dateTime = new Date().toLocaleString();
+    setTransactions([
+      ...transactions,
+      {
+        orderNumber,
+        price,
+        discount,
+        totalPrice,
+        paymentMethod,
+        deliveryAddress,
+        dateTime,
+        items: orderItems,
+      }
+    ]);
+  };
+
   return (
     <Router>
       <div className="d-flex flex-column min-vh-100">
@@ -38,8 +64,19 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
             <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
-            <Route path="/cart" element={<Cart cart={cart} />} />
-            <Route path="/checkout" element={<Checkout setCart={setCart} />} />
+            <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
+            <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} onTransaction={handleTransaction} />} />
+            <Route path="/user" element={
+              <User
+                userName={userName}
+                setUserName={setUserName}
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
+                deliveryAddress={deliveryAddress}
+                setDeliveryAddress={setDeliveryAddress}
+                transactions={transactions}
+              />
+            } />
           </Routes>
         </main>
       </div>
