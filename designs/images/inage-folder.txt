@@ -1,0 +1,1 @@
+this folder should contain images that the app needs

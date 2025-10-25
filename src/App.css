@@ -2,10 +2,12 @@
   text-align: center;
 }
 
+
 .main-content {
   min-height: 400px;
   transition: margin-left 0.3s;
 }
+
 
 /* Sidebar styles */
 .sidebar {
@@ -19,6 +21,7 @@
   z-index: 1020;
 }
 
+
 /* Sidebar content margin for desktop */
 @media (min-width: 768px) {
   .main-content {
@@ -26,21 +29,63 @@
   }
 }
 
-/* Sidebar links */
+
+/* Sidebar links - Override Bootstrap Nav.Link defaults */
 .sidebar-link {
   color: #f8f9fa !important;
   text-decoration: none;
   padding: 10px 15px;
-  border-radius: 4px;
   display: block;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s ease;
+  position: relative;
+  border-radius: 0 !important;
+  margin-right: 0;
+  background-color: transparent !important;
 }
 
-/* Hover effect — lightens buttons */
-.sidebar-link:hover {
-  background-color: #343a40;
-  color: #ffffff !important;
+
+/* Remove Bootstrap's default hover/focus styles */
+.sidebar-link:hover,
+.sidebar-link:focus {
+  background-color: transparent !important;
+  color: #f8f9fa !important;
 }
+
+
+/* Hover effect — lightens buttons with rounded edges */
+.sidebar-link:hover:not(.active) {
+  background-color: #343a40 !important;
+  color: #ffffff !important;
+  border-top-left-radius: 12px !important;
+  border-bottom-left-radius: 12px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  margin-right: -16px;
+  padding-right: 31px;
+}
+
+
+/* Active state - highlighted with light background that bleeds to the right */
+.sidebar-link.active {
+  background-color: #fcfcf9 !important;
+  color: #212529 !important;
+  font-weight: 500;
+  border-top-left-radius: 12px !important;
+  border-bottom-left-radius: 12px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  margin-right: -16px;
+  padding-right: 31px;
+}
+
+
+/* Ensure active state doesn't get Bootstrap hover styles */
+.sidebar-link.active:hover,
+.sidebar-link.active:focus {
+  background-color: #fcfcf9 !important;
+  color: #212529 !important;
+}
+
 
 /* Footer */
 footer {
@@ -49,12 +94,14 @@ footer {
   width: 100%;
 }
 
+
 /* Mobile Toggle Button */
 .btn-dark {
   background-color: #212529;
   border-color: #212529;
   transition: background-color 0.2s;
 }
+
 
 .btn-dark:hover {
   background-color: #343a40;
