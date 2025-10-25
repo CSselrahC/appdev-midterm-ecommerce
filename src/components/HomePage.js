@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+//import ad1 from '../designs/images/ads.png';
 
 function HomePage() {
   return (
