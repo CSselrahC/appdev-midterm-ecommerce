@@ -29,6 +29,7 @@ function NavBar() {
               to="/" 
               className={`sidebar-link mb-2 ${isActive('/') ? 'active' : ''}`}
             >
+              <i className="ri-home-line me-2"></i>
               Home
             </Nav.Link>
             <Nav.Link 
@@ -36,6 +37,7 @@ function NavBar() {
               to="/products" 
               className={`sidebar-link mb-2 ${isActive('/products') ? 'active' : ''}`}
             >
+              <i className="ri-shopping-basket-line me-2"></i>
               Marketplace
             </Nav.Link>
             <Nav.Link 
@@ -43,6 +45,7 @@ function NavBar() {
               to="/cart" 
               className={`sidebar-link mb-2 ${isActive('/cart') ? 'active' : ''}`}
             >
+              <i className="ri-shopping-cart-line me-2"></i>
               Cart
             </Nav.Link>
             <Nav.Link 
@@ -50,6 +53,7 @@ function NavBar() {
               to="/user" 
               className={`sidebar-link mb-2 ${isActive('/user') ? 'active' : ''}`}
             >
+              <i className="ri-user-line me-2"></i>
               Account
             </Nav.Link>
           </Nav>
@@ -89,6 +93,7 @@ function NavBar() {
               onClick={handleClose} 
               className={`sidebar-link mb-2 ${isActive('/') ? 'active' : ''}`}
             >
+              <i className="ri-home-line me-2"></i>
               Home
             </Nav.Link>
             <Nav.Link 
@@ -97,6 +102,7 @@ function NavBar() {
               onClick={handleClose} 
               className={`sidebar-link mb-2 ${isActive('/products') ? 'active' : ''}`}
             >
+              <i className="ri-shopping-basket-line me-2"></i>
               Marketplace
             </Nav.Link>
             <Nav.Link 
@@ -105,6 +111,7 @@ function NavBar() {
               onClick={handleClose} 
               className={`sidebar-link mb-2 ${isActive('/cart') ? 'active' : ''}`}
             >
+              <i className="ri-shopping-cart-line me-2"></i>
               Cart
             </Nav.Link>
             <Nav.Link 
@@ -113,6 +120,7 @@ function NavBar() {
               onClick={handleClose} 
               className={`sidebar-link mb-2 ${isActive('/user') ? 'active' : ''}`}
             >
+              <i className="ri-user-line me-2"></i>
               Account
             </Nav.Link>
           </Nav>
