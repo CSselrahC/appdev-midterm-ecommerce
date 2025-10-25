@@ -14,6 +14,7 @@ import User from './components/User';
 function App() {
   const [cart, setCart] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [usedCoupons, setUsedCoupons] = useState([]);
   // User details in state
   const [userName, setUserName] = useState("Cagayan");
   const [paymentMethod, setPaymentMethod] = useState("GCash");
@@ -39,7 +40,7 @@ function App() {
   };
 
 
-  const handleTransaction = (orderItems, discount = 0) => {
+  const handleTransaction = (orderItems, discount = 0, couponCode = '---') => {
     const orderNumber = transactions.length + 1;
     const price = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const totalPrice = price - discount;
@@ -51,12 +52,18 @@ function App() {
         price,
         discount,
         totalPrice,
+        couponCode,
         paymentMethod,
         deliveryAddress,
         dateTime,
         items: orderItems,
       }
     ]);
+
+    // Mark coupon as used if one was applied
+    if (couponCode !== '---') {
+      setUsedCoupons([...usedCoupons, couponCode]);
+    }
   };
 
 
@@ -70,7 +77,7 @@ function App() {
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
             <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
             <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
-            <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} onTransaction={handleTransaction} />} />
+            <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} onTransaction={handleTransaction} usedCoupons={usedCoupons} />} />
             <Route path="/user" element={
               <User
                 userName={userName}

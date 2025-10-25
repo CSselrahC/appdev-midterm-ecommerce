@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+
 function User({
   userName,
   setUserName,
@@ -15,6 +16,7 @@ function User({
   const [formPaymentMethod, setFormPaymentMethod] = useState(paymentMethod);
   const [formAddress, setFormAddress] = useState(deliveryAddress);
 
+
   const handleSave = (e) => {
     e.preventDefault();
     setUserName(formName.trim() === "" ? "Unnamed" : formName);
@@ -23,12 +25,14 @@ function User({
     setEdit(false);
   };
 
+
   const handleCancel = () => {
     setFormName(userName);
     setFormPaymentMethod(paymentMethod);
     setFormAddress(deliveryAddress);
     setEdit(false);
   };
+
 
   return (
     <div className="text-center">
@@ -112,6 +116,7 @@ function User({
                 <th>Price (₱)</th>
                 <th>Discount (₱)</th>
                 <th>Total Price (₱)</th>
+                <th>Coupon Code</th>
                 <th>Payment Method</th>
                 <th>Delivery Address</th>
                 <th>Date & Time</th>
@@ -124,6 +129,7 @@ function User({
                   <td>₱{tx.price.toFixed(2)}</td>
                   <td>₱{tx.discount}</td>
                   <td>₱{tx.totalPrice.toFixed(2)}</td>
+                  <td>{tx.couponCode || '---'}</td>
                   <td>{tx.paymentMethod}</td>
                   <td>{tx.deliveryAddress}</td>
                   <td>{tx.dateTime}</td>
@@ -136,5 +142,6 @@ function User({
     </div>
   );
 }
+
 
 export default User;
