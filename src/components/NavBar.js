@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { Offcanvas, Nav, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../App.css'; // Ensure CSS hover effect is loaded
+
 
 function NavBar() {
   const [show, setShow] = useState(false);
+  const location = useLocation();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
 
   return (
     <>
@@ -18,18 +24,42 @@ function NavBar() {
             Docker Motorsports
           </div>
           <Nav className="flex-column">
-            <Nav.Link as={Link} to="/" className="sidebar-link mb-2">
+            <Nav.Link 
+              as={Link} 
+              to="/" 
+              className={`sidebar-link mb-2 ${isActive('/') ? 'active' : ''}`}
+            >
+              <i className="ri-home-line me-2"></i>
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/products" className="sidebar-link mb-2">
-              Products
+            <Nav.Link 
+              as={Link} 
+              to="/products" 
+              className={`sidebar-link mb-2 ${isActive('/products') ? 'active' : ''}`}
+            >
+              <i className="ri-shopping-basket-line me-2"></i>
+              Marketplace
             </Nav.Link>
-            <Nav.Link as={Link} to="/cart" className="sidebar-link mb-2">
+            <Nav.Link 
+              as={Link} 
+              to="/cart" 
+              className={`sidebar-link mb-2 ${isActive('/cart') ? 'active' : ''}`}
+            >
+              <i className="ri-shopping-cart-line me-2"></i>
               Cart
+            </Nav.Link>
+            <Nav.Link 
+              as={Link} 
+              to="/user" 
+              className={`sidebar-link mb-2 ${isActive('/user') ? 'active' : ''}`}
+            >
+              <i className="ri-user-line me-2"></i>
+              Account
             </Nav.Link>
           </Nav>
         </div>
       </div>
+
 
       {/* Toggle button for mobile */}
       <Button
@@ -41,6 +71,7 @@ function NavBar() {
       >
         ☰
       </Button>
+
 
       {/* Offcanvas version for mobile */}
       <Offcanvas
@@ -56,14 +87,41 @@ function NavBar() {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Nav className="flex-column">
-            <Nav.Link as={Link} to="/" onClick={handleClose} className="sidebar-link mb-2">
+            <Nav.Link 
+              as={Link} 
+              to="/" 
+              onClick={handleClose} 
+              className={`sidebar-link mb-2 ${isActive('/') ? 'active' : ''}`}
+            >
+              <i className="ri-home-line me-2"></i>
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/products" onClick={handleClose} className="sidebar-link mb-2">
-              Products
+            <Nav.Link 
+              as={Link} 
+              to="/products" 
+              onClick={handleClose} 
+              className={`sidebar-link mb-2 ${isActive('/products') ? 'active' : ''}`}
+            >
+              <i className="ri-shopping-basket-line me-2"></i>
+              Marketplace
             </Nav.Link>
-            <Nav.Link as={Link} to="/cart" onClick={handleClose} className="sidebar-link mb-2">
+            <Nav.Link 
+              as={Link} 
+              to="/cart" 
+              onClick={handleClose} 
+              className={`sidebar-link mb-2 ${isActive('/cart') ? 'active' : ''}`}
+            >
+              <i className="ri-shopping-cart-line me-2"></i>
               Cart
+            </Nav.Link>
+            <Nav.Link 
+              as={Link} 
+              to="/user" 
+              onClick={handleClose} 
+              className={`sidebar-link mb-2 ${isActive('/user') ? 'active' : ''}`}
+            >
+              <i className="ri-user-line me-2"></i>
+              Account
             </Nav.Link>
           </Nav>
         </Offcanvas.Body>
@@ -71,5 +129,6 @@ function NavBar() {
     </>
   );
 }
+
 
 export default NavBar;

@@ -36,8 +36,7 @@ function User({
 
   return (
     <div className="text-center">
-      <Link to="/" className="btn btn-primary mt-2">Back</Link>
-      <h1 className="fw-bold mt-4">User Page</h1>
+      <h1 className="fw-bold mt-4">Account</h1>
       {!edit ? (
         <div>
           <p>Name: {userName}</p>
