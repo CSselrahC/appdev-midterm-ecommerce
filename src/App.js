@@ -10,32 +10,37 @@ import ProductDetails from './components/ProductDetails';
 import Checkout from './components/Checkout';
 import User from './components/User';
 
+
 function App() {
   const [cart, setCart] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [usedCoupons, setUsedCoupons] = useState([]);
   // User details in state
   const [userName, setUserName] = useState("Cagayan");
   const [paymentMethod, setPaymentMethod] = useState("GCash");
   const [deliveryAddress, setDeliveryAddress] = useState("dyan sa may kanto");
 
+
   useEffect(() => {
     document.title = "Docker Motorsports";
   }, []);
 
-  const addToCart = (productToAdd) => {
+
+  const addToCart = (productToAdd, quantityToAdd = 1) => {
     const existingProduct = cart.find(item => item.id === productToAdd.id);
     if (existingProduct) {
       setCart(cart.map(item =>
         item.id === productToAdd.id
-          ? { ...item, quantity: item.quantity + 1 }
+          ? { ...item, quantity: item.quantity + quantityToAdd }
           : item
       ));
     } else {
-      setCart([...cart, { ...productToAdd, quantity: 1 }]);
+      setCart([...cart, { ...productToAdd, quantity: quantityToAdd }]);
     }
   };
 
-  const handleTransaction = (orderItems, discount = 0) => {
+
+  const handleTransaction = (orderItems, discount = 0, couponCode = '---') => {
     const orderNumber = transactions.length + 1;
     const price = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const totalPrice = price - discount;
@@ -47,13 +52,20 @@ function App() {
         price,
         discount,
         totalPrice,
+        couponCode,
         paymentMethod,
         deliveryAddress,
         dateTime,
         items: orderItems,
       }
     ]);
+
+    // Mark coupon as used if one was applied
+    if (couponCode !== '---') {
+      setUsedCoupons([...usedCoupons, couponCode]);
+    }
   };
+
 
   return (
     <Router>
@@ -65,7 +77,7 @@ function App() {
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
             <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
             <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
-            <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} onTransaction={handleTransaction} />} />
+            <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} onTransaction={handleTransaction} usedCoupons={usedCoupons} />} />
             <Route path="/user" element={
               <User
                 userName={userName}
@@ -83,5 +95,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
