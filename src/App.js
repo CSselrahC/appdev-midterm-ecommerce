@@ -10,6 +10,7 @@ import ProductDetails from './components/ProductDetails';
 import Checkout from './components/Checkout';
 import User from './components/User';
 
+
 function App() {
   const [cart, setCart] = useState([]);
   const [transactions, setTransactions] = useState([]);
@@ -18,22 +19,25 @@ function App() {
   const [paymentMethod, setPaymentMethod] = useState("GCash");
   const [deliveryAddress, setDeliveryAddress] = useState("dyan sa may kanto");
 
+
   useEffect(() => {
     document.title = "Docker Motorsports";
   }, []);
 
-  const addToCart = (productToAdd) => {
+
+  const addToCart = (productToAdd, quantityToAdd = 1) => {
     const existingProduct = cart.find(item => item.id === productToAdd.id);
     if (existingProduct) {
       setCart(cart.map(item =>
         item.id === productToAdd.id
-          ? { ...item, quantity: item.quantity + 1 }
+          ? { ...item, quantity: item.quantity + quantityToAdd }
           : item
       ));
     } else {
-      setCart([...cart, { ...productToAdd, quantity: 1 }]);
+      setCart([...cart, { ...productToAdd, quantity: quantityToAdd }]);
     }
   };
+
 
   const handleTransaction = (orderItems, discount = 0) => {
     const orderNumber = transactions.length + 1;
@@ -54,6 +58,7 @@ function App() {
       }
     ]);
   };
+
 
   return (
     <Router>
@@ -83,5 +88,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
