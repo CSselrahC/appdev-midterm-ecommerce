@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import coupons from '../data/coupons.json';
-
 
 function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
   const [purchased, setPurchased] = useState(false);
@@ -11,24 +11,35 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
   const [appliedCouponCode, setAppliedCouponCode] = useState('---');
   const [couponMessage, setCouponMessage] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
+  
+  // Payment method state
+  const [paymentMethod, setPaymentMethod] = useState('cod');
+  
+  // Contact information state
+  const [contactInfo, setContactInfo] = useState({
+    firstName: '',
+    lastName: '',
+    houseStreet: '',
+    barangay: '',
+    city: '',
+    postalCode: ''
+  });
 
+  const shippingFee = 0; // You can make this dynamic
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const boughtTotal = boughtList.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const validateCoupon = (code) => {
-    // Case-sensitive check
     const coupon = coupons.find(c => c.code === code);
     
     if (!coupon) {
       return { valid: false, message: 'Invalid coupon code', discount: 0 };
     }
 
-    // Check if coupon has already been used
     if (usedCoupons.includes(code)) {
       return { valid: false, message: 'Coupon has already been used', discount: 0 };
     }
 
-    // Check if coupon is within valid date range
     const currentDate = new Date();
     const startDate = new Date(coupon.startDate);
     const endDate = new Date(coupon.endDate);
@@ -81,192 +92,312 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
   };
 
   const handleBuyProduct = () => {
-    setBoughtList(cart); // Store a snapshot before clearing
+    // Validate contact information
+    if (!contactInfo.firstName || !contactInfo.lastName || !contactInfo.houseStreet) {
+      alert('Please fill in required contact information');
+      return;
+    }
+
+    setBoughtList(cart);
     setPurchased(true);
-    setCart([]); // Empties the cart after purchase
+    setCart([]);
     if (onTransaction) {
       onTransaction(cart, appliedDiscount, appliedCouponCode);
     }
   };
 
-  const finalTotal = Math.max(0, total - appliedDiscount);
-  const boughtFinalTotal = Math.max(0, boughtTotal - appliedDiscount);
+  const finalTotal = Math.max(0, total - appliedDiscount + shippingFee);
+  const boughtFinalTotal = Math.max(0, boughtTotal - appliedDiscount + shippingFee);
 
-  return (
-    <div style={{ margin: '20px' }}>
-      <h1>Checkout</h1>
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setContactInfo(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-      {cart.length === 0 && !purchased ? (
+  // Purchase confirmation view
+  if (purchased) {
+    return (
+      <div className="container mt-4">
+        <h2>Thank you for your purchase!</h2>
+        <p>You have bought the following products:</p>
+        <table className="table table-bordered">
+          <thead className="table-light">
+            <tr>
+              <th>Product Name</th>
+              <th>Price (₱)</th>
+              <th>Quantity</th>
+              <th>Total (₱)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {boughtList.map(item => (
+              <tr key={item.id}>
+                <td>{item.name}</td>
+                <td>₱{item.price.toFixed(2)}</td>
+                <td>{item.quantity}</td>
+                <td>₱{(item.price * item.quantity).toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <h3>Subtotal: ₱{boughtTotal.toFixed(2)}</h3>
+        <h3>Discount: ₱{appliedDiscount.toFixed(2)}</h3>
+        <h3>Shipping Fee: ₱{shippingFee.toFixed(2)}</h3>
+        {appliedCouponCode !== '---' && (
+          <h3 className="text-success">Coupon Used: {appliedCouponCode}</h3>
+        )}
+        <h3>Total Price: ₱{boughtFinalTotal.toFixed(2)}</h3>
+        <h4 className="mt-3">Payment Method: {paymentMethod === 'cod' ? 'Cash On Delivery' : paymentMethod === 'gcash' ? 'Gcash' : 'Debit/Credit Card'}</h4>
+        <div className="mt-4">
+          <Link to="/">
+            <button className="btn btn-primary">Return Home</button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Empty cart view
+  if (cart.length === 0) {
+    return (
+      <div className="container mt-4">
         <p>No items in your cart.</p>
-      ) : purchased ? (
-        <div>
-          <h2>Thank you for your purchase!</h2>
-          <p>You have bought the following products:</p>
-          <table
-            border="1"
-            cellPadding="8"
-            style={{
-              borderCollapse: 'collapse',
-              width: '100%',
-              marginBottom: '20px',
-              textAlign: 'left'
-            }}
-          >
-            <thead>
-              <tr style={{ backgroundColor: '#f2f2f2' }}>
-                <th>Product Name</th>
-                <th>Price (₱)</th>
-                <th>Quantity</th>
-                <th>Total (₱)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {boughtList.map(item => (
-                <tr key={item.id}>
-                  <td>{item.name}</td>
-                  <td>₱{item.price.toFixed(2)}</td>
-                  <td>{item.quantity}</td>
-                  <td>₱{(item.price * item.quantity).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <h2>Price: ₱{boughtTotal.toFixed(2)}</h2>
-          <h2>Discount: ₱{appliedDiscount.toFixed(2)}</h2>
-          {appliedCouponCode !== '---' && (
-            <h2 style={{ color: '#28a745' }}>Coupon Used: {appliedCouponCode}</h2>
-          )}
-          <h2>Total Price: ₱{boughtFinalTotal.toFixed(2)}</h2>
-          <div style={{ marginTop: '20px' }}>
-            <Link to="/">
-              <button style={{ padding: '10px 15px', cursor: 'pointer' }}>
-                Return Home
-              </button>
-            </Link>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <table
-            border="1"
-            cellPadding="8"
-            style={{
-              borderCollapse: 'collapse',
-              width: '100%',
-              marginBottom: '20px',
-              textAlign: 'left'
-            }}
-          >
-            <thead>
-              <tr style={{ backgroundColor: '#f2f2f2' }}>
-                <th>Product Name</th>
-                <th>Price (₱)</th>
-                <th>Quantity</th>
-                <th>Total (₱)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cart.map(item => (
-                <tr key={item.id}>
-                  <td>{item.name}</td>
-                  <td>₱{item.price.toFixed(2)}</td>
-                  <td>{item.quantity}</td>
-                  <td>₱{(item.price * item.quantity).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <Link to="/products">
+          <button className="btn btn-primary">Continue Shopping</button>
+        </Link>
+      </div>
+    );
+  }
 
-          <div style={{ marginBottom: '20px', maxWidth: '500px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
-              Coupon Code (Optional):
-            </label>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-              <input
-                type="text"
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value)}
-                placeholder="Enter coupon code"
-                disabled={couponApplied}
-                style={{
-                  flex: 1,
-                  padding: '8px 12px',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  fontSize: '14px'
-                }}
-              />
-              {!couponApplied ? (
-                <button
-                  onClick={handleApplyCoupon}
-                  style={{
-                    padding: '8px 16px',
-                    cursor: 'pointer',
-                    backgroundColor: '#28a745',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px'
-                  }}
-                >
-                  Apply
-                </button>
-              ) : (
-                <button
-                  onClick={handleRemoveCoupon}
-                  style={{
-                    padding: '8px 16px',
-                    cursor: 'pointer',
-                    backgroundColor: '#dc3545',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px'
-                  }}
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-            {couponMessage && (
-              <div
-                style={{
-                  marginTop: '10px',
-                  padding: '8px 12px',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                  backgroundColor: couponApplied ? '#d4edda' : '#f8d7da',
-                  color: couponApplied ? '#155724' : '#721c24',
-                  border: `1px solid ${couponApplied ? '#c3e6cb' : '#f5c6cb'}`
-                }}
-              >
-                {couponMessage}
+  // Main checkout view
+  return (
+    <div className="container-fluid mt-4">
+      <h2 className="mb-4">Payment Transaction</h2>
+      
+      <div className="row">
+        {/* Left Column - Contact Info & Payment Method */}
+        <div className="col-md-7">
+          {/* Contact Information */}
+          <div className="card mb-4">
+            <div className="card-body">
+              <h5 className="card-title mb-3">Contact Information</h5>
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label className="form-label">First Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="firstName"
+                    value={contactInfo.firstName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">Last Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="lastName"
+                    value={contactInfo.lastName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="col-12">
+                  <label className="form-label">House No./Street</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="houseStreet"
+                    value={contactInfo.houseStreet}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">Barangay</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="barangay"
+                    value={contactInfo.barangay}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">City</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="city"
+                    value={contactInfo.city}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">Postal Code</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="postalCode"
+                    value={contactInfo.postalCode}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
-            )}
+            </div>
           </div>
 
-          <h2>Subtotal: ₱{total.toFixed(2)}</h2>
-          {appliedDiscount > 0 && (
-            <h2 style={{ color: '#28a745' }}>Discount: -₱{appliedDiscount.toFixed(2)}</h2>
-          )}
-          <h2>Total Price: ₱{finalTotal.toFixed(2)}</h2>
+          {/* Payment Method */}
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title mb-3">Payment Method</h5>
+              
+              <div className="form-check mb-3 p-3 border rounded">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="paymentMethod"
+                  id="cod"
+                  value="cod"
+                  checked={paymentMethod === 'cod'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <label className="form-check-label ms-2" htmlFor="cod">
+                  <strong>Cash On Delivery (COD)</strong>
+                  <div className="text-muted small">Pay with cash upon delivery</div>
+                </label>
+              </div>
 
-          <div style={{ marginTop: '20px' }}>
-            <Link to="/">
-              <button style={{ padding: '10px 15px', cursor: 'pointer', marginRight: '10px' }}>
-                Return Home
-              </button>
-            </Link>
-            <button
-              onClick={handleBuyProduct}
-              style={{ padding: '10px 15px', cursor: 'pointer' }}
-            >
-              Place Order
-            </button>
+              <div className="form-check mb-3 p-3 border rounded">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="paymentMethod"
+                  id="gcash"
+                  value="gcash"
+                  checked={paymentMethod === 'gcash'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <label className="form-check-label ms-2" htmlFor="gcash">
+                  <strong>Gcash</strong>
+                  <div className="text-muted small">Pay instantly with Gcash</div>
+                </label>
+              </div>
+
+              <div className="form-check mb-3 p-3 border rounded">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="paymentMethod"
+                  id="card"
+                  value="card"
+                  checked={paymentMethod === 'card'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <label className="form-check-label ms-2" htmlFor="card">
+                  <strong>Debit/Credit Card</strong>
+                  <div className="text-muted small">Pay with your card</div>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
-      )}
+
+        {/* Right Column - Order Summary */}
+        <div className="col-md-5">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title mb-3">Order Summary</h5>
+              
+              {/* Product List */}
+              {cart.map((item) => (
+                <div key={item.id} className="d-flex align-items-center mb-3 pb-3 border-bottom">
+                  <div 
+                    className="bg-secondary text-white d-flex align-items-center justify-content-center me-3"
+                    style={{ width: '60px', height: '60px', borderRadius: '8px', fontSize: '10px' }}
+                  >
+                    Product<br/>Image
+                  </div>
+                  <div className="flex-grow-1">
+                    <div className="fw-bold">{item.name}</div>
+                    <div className="text-muted small">Qty: {item.quantity}</div>
+                  </div>
+                  <div className="fw-bold">₱{item.price.toFixed(2)}</div>
+                </div>
+              ))}
+
+              {/* Redeem Code */}
+              <div className="mb-3">
+                <label className="form-label">Redeem Code</label>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    placeholder="Enter code"
+                    disabled={couponApplied}
+                  />
+                  {!couponApplied ? (
+                    <button
+                      className="btn btn-outline-secondary"
+                      onClick={handleApplyCoupon}
+                    >
+                      ✓
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-outline-danger"
+                      onClick={handleRemoveCoupon}
+                    >
+                      ✗
+                    </button>
+                  )}
+                </div>
+                {couponMessage && (
+                  <div className={`alert ${couponApplied ? 'alert-success' : 'alert-danger'} mt-2 py-1 px-2 small`}>
+                    {couponMessage}
+                  </div>
+                )}
+              </div>
+
+              {/* Price Summary */}
+              <div className="border-top pt-3">
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Subtotal:</span>
+                  <span>₱{total.toFixed(2)}</span>
+                </div>
+                {appliedDiscount > 0 && (
+                  <div className="d-flex justify-content-between mb-2 text-success">
+                    <span>Discount:</span>
+                    <span>-₱{appliedDiscount.toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Shipping Fee:</span>
+                  <span>₱{shippingFee.toFixed(2)}</span>
+                </div>
+                <div className="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
+                  <span>Total:</span>
+                  <span>₱{finalTotal.toFixed(2)}</span>
+                </div>
+              </div>
+
+              {/* Place Order Button */}
+              <button
+                className="btn btn-dark w-100 mt-3"
+                onClick={handleBuyProduct}
+              >
+                Place Order
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
-
 
 export default Checkout;
