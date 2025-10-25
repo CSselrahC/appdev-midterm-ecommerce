@@ -8,7 +8,6 @@ function HomePage() {
       <h1 className="fw-bold mt-4">🚗 Docker Motorsports</h1>
       <p>Your one-stop shop for tires, suspensions, diecast cars, and everything motorsports!</p>
       <p>Browse our latest products now!</p>
-      <p> hello</p>
       <Link to="/products" className="btn btn-primary mt-2">View Products</Link>
 
       <div className="mt-5">
