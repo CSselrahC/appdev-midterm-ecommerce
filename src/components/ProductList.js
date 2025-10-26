@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import products from '../data/products.json';
 
-const defaultImage = '/images/default-product.png'; // default fallback image
-
 function ProductList({ addToCart }) {
   const [quantities, setQuantities] = useState(() => {
     const initialQuantities = {};
@@ -60,7 +58,6 @@ function ProductList({ addToCart }) {
       <div className="row">
         {products.map(product => {
           const hasImage = product.images && product.images.length > 0;
-          const imageSrc = hasImage ? product.images[0] : defaultImage;
           const imageErrored = imageErrorMap[product.id];
           const quantity = quantities[product.id] || 0;
 
@@ -81,13 +78,9 @@ function ProductList({ addToCart }) {
                     <div>No images available</div>
                   ) : (
                     <img
-                      src={imageSrc}
+                      src={product.images[0]}
                       alt={product.name}
-                      style={{
-                        maxHeight: '100%',
-                        maxWidth: '100%',
-                        objectFit: 'contain'
-                      }}
+                      style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
                       onError={() => handleImageError(product.id)}
                     />
                   )}
@@ -113,20 +106,16 @@ function ProductList({ addToCart }) {
                     View Product
                   </Link>
 
-                  {/* Quantity and Add to Cart responsive container */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      alignItems: 'center',
-                      gap: '10px',
-                      flexGrow: 0,
-                      marginTop: 'auto',
-                      justifyContent: 'start',
-                      maxWidth: '300px',
-                    }}
-                    className="quantity-addcart-container"
-                  >
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    gap: '10px',
+                    flexGrow: 0,
+                    marginTop: 'auto',
+                    justifyContent: 'start',
+                    maxWidth: '300px',
+                  }} className="quantity-addcart-container">
                     <div className="d-flex align-items-center" style={{ minWidth: '160px' }}>
                       <button
                         className="btn btn-outline-secondary"
@@ -192,31 +181,6 @@ function ProductList({ addToCart }) {
         })}
       </div>
       <Link to="/cart" className="btn btn-dark mt-3">View Cart</Link>
-
-      {/* Inline style or can be moved to CSS */}
-      <style>
-        {`
-          @media (min-width: 768px) {
-            .quantity-addcart-container {
-              flex-wrap: nowrap !important;
-              justify-content: flex-start !important;
-            }
-          }
-
-          @media (max-width: 767.98px) {
-            .quantity-addcart-container {
-              flex-wrap: wrap !important;
-              justify-content: flex-start !important;
-            }
-
-            .quantity-addcart-container > .btn-success {
-              flex-grow: 1;
-              min-width: 100%;
-              margin-top: 0.5rem;
-            }
-          }
-        `}
-      </style>
     </div>
   );
 }

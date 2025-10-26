@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import products from '../data/products.json';
 
-const defaultImage = '/images/default-product.png'; // Default image path
-
 function ProductDetails({ cart, setCart }) {
   const { id } = useParams();
   const productId = parseInt(id);
@@ -17,26 +15,25 @@ function ProductDetails({ cart, setCart }) {
   if (!product) return <div>Product not found for ID {id}</div>;
 
   const hasImages = product.images && product.images.length > 0;
-  const images = hasImages ? product.images : [defaultImage];
 
   const handleImageError = (event) => {
     if (!imageError) {
       setImageError(true);
-      event.target.src = defaultImage;
+      // no fallback image set because defaultImage removed
     }
   };
 
   const prevImage = () => {
     setImageError(false);
     setCurrentImageIndex(prevIndex =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      prevIndex === 0 ? product.images.length - 1 : prevIndex - 1
     );
   };
 
   const nextImage = () => {
     setImageError(false);
     setCurrentImageIndex(prevIndex =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
     );
   };
 
@@ -87,26 +84,30 @@ function ProductDetails({ cart, setCart }) {
         <h3>{product.name}</h3>
 
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', maxWidth: '400px', margin: 'auto', position: 'relative', marginBottom: '1rem' }}>
-          <button
-            onClick={prevImage}
-            aria-label="Previous Image"
-            style={{
-              backgroundColor: 'transparent',
-              border: 'none',
-              fontSize: '2rem',
-              cursor: 'pointer',
-              color: '#0d6efd',
-              marginRight: '10px',
-              userSelect: 'none'
-            }}
-          >&lt;</button>
+          
+          {/* Show arrows only if product has more than 1 image */}
+          {hasImages && product.images.length > 1 && 
+            <button
+              onClick={prevImage}
+              aria-label="Previous Image"
+              style={{
+                backgroundColor: 'transparent',
+                border: 'none',
+                fontSize: '2rem',
+                cursor: 'pointer',
+                color: '#0d6efd',
+                marginRight: '10px',
+                userSelect: 'none'
+              }}
+            >&lt;</button>
+          }
 
           <div className="product-image-box" style={{ position: 'relative', width: '100%', minHeight: '180px', backgroundColor: '#f8f9fa', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '8px' }}>
-            {(!hasImages || imageError) ? (
+            {!hasImages || imageError ? (
               <div style={{ fontStyle: 'italic', color: '#888' }}>No images available</div>
             ) : (
               <img
-                src={images[currentImageIndex]}
+                src={product.images[currentImageIndex]}
                 alt={`${product.name} ${currentImageIndex + 1}`}
                 onError={handleImageError}
                 style={{ maxWidth: '100%', maxHeight: '180px', objectFit: 'contain', borderRadius: '8px' }}
@@ -114,39 +115,44 @@ function ProductDetails({ cart, setCart }) {
             )}
           </div>
 
-          <button
-            onClick={nextImage}
-            aria-label="Next Image"
-            style={{
-              backgroundColor: 'transparent',
-              border: 'none',
-              fontSize: '2rem',
-              cursor: 'pointer',
-              color: '#0d6efd',
-              marginLeft: '10px',
-              userSelect: 'none'
-            }}
-          >&gt;</button>
+          {hasImages && product.images.length > 1 &&
+            <button
+              onClick={nextImage}
+              aria-label="Next Image"
+              style={{
+                backgroundColor: 'transparent',
+                border: 'none',
+                fontSize: '2rem',
+                cursor: 'pointer',
+                color: '#0d6efd',
+                marginLeft: '10px',
+                userSelect: 'none'
+              }}
+            >&gt;</button>
+          }
         </div>
 
-        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-          {images.map((_, idx) => (
-            <span
-              key={idx}
-              onClick={() => selectImage(idx)}
-              style={{
-                display: 'inline-block',
-                width: '8px',
-                height: '8px',
-                margin: '0 4px',
-                backgroundColor: idx === currentImageIndex ? '#0d6efd' : '#ccc',
-                borderRadius: '50%',
-                cursor: 'pointer'
-              }}
-              aria-label={`Select image ${idx + 1}`}
-            />
-          ))}
-        </div>
+        {/* Dots only if product has images */}
+        {hasImages && product.images.length > 0 && (
+          <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+            {product.images.map((_, idx) => (
+              <span
+                key={idx}
+                onClick={() => selectImage(idx)}
+                style={{
+                  display: 'inline-block',
+                  width: '8px',
+                  height: '8px',
+                  margin: '0 4px',
+                  backgroundColor: idx === currentImageIndex ? '#0d6efd' : '#ccc',
+                  borderRadius: '50%',
+                  cursor: 'pointer'
+                }}
+                aria-label={`Select image ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
 
         <p>{product.description}</p>
         <h5 style={{ fontSize: '0.8rem', color: '#666' }}>
