@@ -78,7 +78,7 @@ function App() {
         <NavBar />
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home userName={firstName} />} />
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
             <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
             <Route path="/details/:id" element={<ProductDetails cart={cart} setCart={setCart} />} />
