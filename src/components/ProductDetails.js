@@ -19,7 +19,6 @@ function ProductDetails({ cart, setCart }) {
   const handleImageError = (event) => {
     if (!imageError) {
       setImageError(true);
-      // no fallback image set because defaultImage removed
     }
   };
 
