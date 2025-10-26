@@ -25,10 +25,23 @@
   z-index: 1020;
 }
 
-/* Sidebar content margin for desktop */
 @media (min-width: 768px) {
   .main-content {
     margin-left: 250px;
+  }
+
+  .header .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .header nav {
+    margin-top: 0.5rem;
+  }
+
+  .nav-link {
+    display: inline-block;
+    margin: 0 0.5rem;
   }
 }
 
