@@ -1,1 +1,5 @@
-this folder should contain Figma links and images about the UI of the app
+This folder contains the images needed for the product pages.
+
+
+This file contains the link for the figma:
+https://www.figma.com/design/18mz7qjGxntodqlnJj7cNG/CCS112-%7C-E-Commerce-%7C-Wireframe?node-id=2073-55&t=5oNnF30dM73NwE8Z-0

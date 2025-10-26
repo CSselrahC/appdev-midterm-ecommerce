@@ -13,7 +13,7 @@ function CheckoutSummary({
   onPlaceOrder
 }) {
 
-  const shippingFee = 50; // Fixed shipping fee
+  const shippingFee = 50;
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
