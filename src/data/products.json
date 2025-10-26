@@ -1,8 +1,38 @@
 [
-  { "id": 1, "name": "Product 1", "description": "A high-performance tire for track days.", "price": 10.00 },
-  { "id": 2, "name": "Product 2", "description": "Adjustable coil-over suspension kit.", "price": 20.00 },
-  { "id": 3, "name": "Product 3", "description": "Limited edition Diecast Model Car.", "price": 30.00 },
-  { "id": 4, "name": "Product 4", "description": "High-flow air intake system.", "price": 20.00 },
-  { "id": 5, "name": "Product 5", "description": "Brembo brake kit upgrade.", "price": 30.00 },
-  { "id": 6, "name": "Product 6", "description": "Carbon fiber rear spoiler.", "price": 45.00 }
+  {
+    "id": 1,
+    "name": "Product 1",
+    "description": "A high-performance tire for track days.",
+    "price": 10.00
+  },
+  {
+    "id": 2,
+    "name": "Product 2",
+    "description": "Adjustable coil-over suspension kit.",
+    "price": 20.00
+  },
+  {
+    "id": 3,
+    "name": "Product 3",
+    "description": "Limited edition Diecast Model Car.",
+    "price": 30.00
+  },
+  {
+    "id": 4,
+    "name": "Product 4",
+    "description": "High-flow air intake system.",
+    "price": 20.00
+  },
+  {
+    "id": 5,
+    "name": "Product 5",
+    "description": "Brembo brake kit upgrade.",
+    "price": 30.00
+  },
+  {
+    "id": 6,
+    "name": "Product 6",
+    "description": "Carbon fiber rear spoiler.",
+    "price": 45.00
+  }
 ]

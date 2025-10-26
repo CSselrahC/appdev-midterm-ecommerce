@@ -35,7 +35,7 @@ function ProductList({ addToCart }) {
 
   const handleAddToCartWithQuantity = (product) => {
     const quantity = quantities[product.id] || 1;
-    
+
     // Validate quantity before adding
     if (quantity < 1 || !Number.isInteger(quantity)) {
       return;
@@ -47,10 +47,10 @@ function ProductList({ addToCart }) {
     }
 
     // Show confirmation message
-    const message = quantity === 1 
+    const message = quantity === 1
       ? `${product.name} has been added to cart`
       : `${quantity} ${product.name} has been added to cart`;
-    
+
     setConfirmationMessage({ productId: product.id, message });
 
     // Hide quantity form and reset
@@ -81,14 +81,14 @@ function ProductList({ addToCart }) {
                 <h5>{product.name}</h5>
                 <p>{product.description}</p>
                 <p>Price: ₱{product.price.toFixed(2)}</p>
-                <Link to={`/product/${product.id}`} className="btn btn-outline-primary btn-sm me-2">
+                <Link to={`/details/${product.id}`} className="btn btn-outline-primary btn-sm me-2">
                   View Product
                 </Link>
-                
+
                 {/* Show Add to Cart button if quantity form is not active */}
                 {activeProduct !== product.id && (
-                  <button 
-                    onClick={() => handleShowQuantityForm(product.id)} 
+                  <button
+                    onClick={() => handleShowQuantityForm(product.id)}
                     className="btn btn-success btn-sm"
                   >
                     Add to Cart

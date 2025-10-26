@@ -25,7 +25,6 @@
   z-index: 1020;
 }
 
-
 /* Sidebar content margin for desktop */
 @media (min-width: 768px) {
   .main-content {
@@ -33,7 +32,6 @@
   }
 }
 
-/* Sidebar links - Override Bootstrap Nav.Link defaults */
 .sidebar-link {
   color: #f8f9fa !important;
   text-decoration: none;
@@ -46,14 +44,12 @@
   background-color: transparent !important;
 }
 
-/* Remove Bootstrap's default hover/focus styles */
 .sidebar-link:hover,
 .sidebar-link:focus {
   background-color: transparent !important;
   color: #f8f9fa !important;
 }
 
-/* Hover effect — lightens buttons with rounded edges */
 .sidebar-link:hover:not(.active) {
   background-color: #343a40 !important;
   color: #ffffff !important;
@@ -65,7 +61,6 @@
   padding-right: 31px;
 }
 
-/* Active state - highlighted with light background that bleeds to the right */
 .sidebar-link.active {
   background-color: #fcfcf9 !important;
   color: #212529 !important;
@@ -78,18 +73,10 @@
   padding-right: 31px;
 }
 
-/* Ensure active state doesn't get Bootstrap hover styles */
 .sidebar-link.active:hover,
 .sidebar-link.active:focus {
   background-color: #fcfcf9 !important;
   color: #212529 !important;
-}
-
-/* Footer */
-footer {
-  position: relative;
-  bottom: 0;
-  width: 100%;
 }
 
 /* Mobile Toggle Button */

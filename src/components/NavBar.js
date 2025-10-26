@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Offcanvas, Nav, Button } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
-import '../App.css'; // Ensure CSS hover effect is loaded
-
+import '../App.css';
 
 function NavBar() {
   const [show, setShow] = useState(false);
   const location = useLocation();
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -24,33 +22,33 @@ function NavBar() {
             Docker Motorsports
           </div>
           <Nav className="flex-column">
-            <Nav.Link 
-              as={Link} 
-              to="/" 
+            <Nav.Link
+              as={Link}
+              to="/"
               className={`sidebar-link mb-2 ${isActive('/') ? 'active' : ''}`}
             >
               <i className="ri-home-line me-2"></i>
               Home
             </Nav.Link>
-            <Nav.Link 
-              as={Link} 
-              to="/products" 
+            <Nav.Link
+              as={Link}
+              to="/products"
               className={`sidebar-link mb-2 ${isActive('/products') ? 'active' : ''}`}
             >
               <i className="ri-shopping-basket-line me-2"></i>
               Marketplace
             </Nav.Link>
-            <Nav.Link 
-              as={Link} 
-              to="/cart" 
+            <Nav.Link
+              as={Link}
+              to="/cart"
               className={`sidebar-link mb-2 ${isActive('/cart') ? 'active' : ''}`}
             >
               <i className="ri-shopping-cart-line me-2"></i>
               Cart
             </Nav.Link>
-            <Nav.Link 
-              as={Link} 
-              to="/user" 
+            <Nav.Link
+              as={Link}
+              to="/user"
               className={`sidebar-link mb-2 ${isActive('/user') ? 'active' : ''}`}
             >
               <i className="ri-user-line me-2"></i>
@@ -72,7 +70,6 @@ function NavBar() {
         ☰
       </Button>
 
-
       {/* Offcanvas version for mobile */}
       <Offcanvas
         show={show}
@@ -87,37 +84,37 @@ function NavBar() {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Nav className="flex-column">
-            <Nav.Link 
-              as={Link} 
-              to="/" 
-              onClick={handleClose} 
+            <Nav.Link
+              as={Link}
+              to="/"
+              onClick={handleClose}
               className={`sidebar-link mb-2 ${isActive('/') ? 'active' : ''}`}
             >
               <i className="ri-home-line me-2"></i>
               Home
             </Nav.Link>
-            <Nav.Link 
-              as={Link} 
-              to="/products" 
-              onClick={handleClose} 
+            <Nav.Link
+              as={Link}
+              to="/products"
+              onClick={handleClose}
               className={`sidebar-link mb-2 ${isActive('/products') ? 'active' : ''}`}
             >
               <i className="ri-shopping-basket-line me-2"></i>
               Marketplace
             </Nav.Link>
-            <Nav.Link 
-              as={Link} 
-              to="/cart" 
-              onClick={handleClose} 
+            <Nav.Link
+              as={Link}
+              to="/cart"
+              onClick={handleClose}
               className={`sidebar-link mb-2 ${isActive('/cart') ? 'active' : ''}`}
             >
               <i className="ri-shopping-cart-line me-2"></i>
               Cart
             </Nav.Link>
-            <Nav.Link 
-              as={Link} 
-              to="/user" 
-              onClick={handleClose} 
+            <Nav.Link
+              as={Link}
+              to="/user"
+              onClick={handleClose}
               className={`sidebar-link mb-2 ${isActive('/user') ? 'active' : ''}`}
             >
               <i className="ri-user-line me-2"></i>
@@ -129,6 +126,5 @@ function NavBar() {
     </>
   );
 }
-
 
 export default NavBar;

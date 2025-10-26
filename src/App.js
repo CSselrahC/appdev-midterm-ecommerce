@@ -15,16 +15,17 @@ function App() {
   const [transactions, setTransactions] = useState([]);
   const [usedCoupons, setUsedCoupons] = useState([]);
 
-  // User details state (initial defaults)
+  // User details
   const [firstName, setFirstName] = useState("Juan");
   const [lastName, setLastName] = useState("Dela Cruz");
-  const [houseStreet, setHouseStreet] = useState("Blk 3 Lot 25 Dangal St.");
-  const [barangay, setBarangay] = useState("Pulo");
-  const [city, setCity] = useState("Cabuyao City");
-  const [postalCode, setPostalCode] = useState("4025");
+  const [houseStreet, setHouseStreet] = useState("123 Main St");
+  const [barangay, setBarangay] = useState("Barangay 1");
+  const [city, setCity] = useState("Manila");
+  const [postalCode, setPostalCode] = useState("1000");
 
-  // Default payment method (will improve later)
-  const defaultPaymentMethod = "GCash";
+  // Payment method default
+  const defaultPaymentMethod = "COD";
+  const shippingFee = 50;
 
   useEffect(() => {
     document.title = "Docker Motorsports";
@@ -43,24 +44,14 @@ function App() {
     }
   };
 
-  // Updated to accept contact info from Checkout and use that for address
-  const handleTransaction = (
-    orderItems,
-    discount = 0,
-    couponCode = '---',
-    contactInfo = null,
-    paymentMethod = defaultPaymentMethod
-  ) => {
+  const handleTransaction = (orderItems, discount = 0, couponCode = '---', contactInfo = null, paymentMethod = defaultPaymentMethod) => {
     const orderNumber = transactions.length + 1;
     const price = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const totalPrice = price - discount;
+    const totalPrice = price - discount + shippingFee;
     const dateTime = new Date().toLocaleString();
-
-    // Use passed contactInfo if available, else fallback to user defaults
     const deliveryAddress = contactInfo
       ? `${contactInfo.houseStreet}, ${contactInfo.barangay}, ${contactInfo.city}, ${contactInfo.postalCode}`
       : `${houseStreet}, ${barangay}, ${city}, ${postalCode}`;
-
     setTransactions([
       ...transactions,
       {
@@ -107,6 +98,7 @@ function App() {
                 }}
               />
             } />
+
             <Route path="/user" element={
               <User
                 firstName={firstName}
