@@ -28,7 +28,7 @@ function App() {
   const shippingFee = 50;
 
   useEffect(() => {
-    document.title = "Docker Motorsports";
+    document.title = "KOTSELL";
   }, []);
 
   const addToCart = (productToAdd, quantityToAdd = 1) => {
