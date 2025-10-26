@@ -16,7 +16,8 @@ function ProductDetails({ cart, setCart }) {
 
   if (!product) return <div>Product not found for ID {id}</div>;
 
-  const images = product.images && product.images.length > 0 ? product.images : [defaultImage];
+  const hasImages = product.images && product.images.length > 0;
+  const images = hasImages ? product.images : [defaultImage];
 
   const handleImageError = (event) => {
     if (!imageError) {
@@ -27,14 +28,14 @@ function ProductDetails({ cart, setCart }) {
 
   const prevImage = () => {
     setImageError(false);
-    setCurrentImageIndex((prevIndex) =>
+    setCurrentImageIndex(prevIndex =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
   };
 
   const nextImage = () => {
     setImageError(false);
-    setCurrentImageIndex((prevIndex) =>
+    setCurrentImageIndex(prevIndex =>
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
     );
   };
@@ -52,11 +53,11 @@ function ProductDetails({ cart, setCart }) {
   };
 
   const decrementQuantity = () => {
-    setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
+    setQuantity(prev => (prev > 0 ? prev - 1 : 0));
   };
 
   const incrementQuantity = () => {
-    setQuantity((prev) => prev + 1);
+    setQuantity(prev => prev + 1);
   };
 
   const handleAddToCart = () => {
@@ -85,58 +86,72 @@ function ProductDetails({ cart, setCart }) {
       <div className="card p-3 shadow-sm">
         <h3>{product.name}</h3>
 
-        <div className="product-image-box mb-3" style={{ position: 'relative', maxWidth: '400px', margin: 'auto' }}>
-          <img
-            src={images[currentImageIndex]}
-            alt={`${product.name} ${currentImageIndex + 1}`}
-            onError={handleImageError}
-            style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
-          />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', maxWidth: '400px', margin: 'auto', position: 'relative', marginBottom: '1rem' }}>
           <button
             onClick={prevImage}
             aria-label="Previous Image"
             style={{
-              position: 'absolute', top: '50%', left: '10px',
-              transform: 'translateY(-50%)',
-              backgroundColor: 'rgba(0,0,0,0.5)', color: '#fff',
-              border: 'none', borderRadius: '50%', width: '30px', height: '30px',
-              cursor: 'pointer'
+              backgroundColor: 'transparent',
+              border: 'none',
+              fontSize: '2rem',
+              cursor: 'pointer',
+              color: '#0d6efd',
+              marginRight: '10px',
+              userSelect: 'none'
             }}
           >&lt;</button>
+
+          <div className="product-image-box" style={{ position: 'relative', width: '100%', minHeight: '180px', backgroundColor: '#f8f9fa', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '8px' }}>
+            {(!hasImages || imageError) ? (
+              <div style={{ fontStyle: 'italic', color: '#888' }}>No images available</div>
+            ) : (
+              <img
+                src={images[currentImageIndex]}
+                alt={`${product.name} ${currentImageIndex + 1}`}
+                onError={handleImageError}
+                style={{ maxWidth: '100%', maxHeight: '180px', objectFit: 'contain', borderRadius: '8px' }}
+              />
+            )}
+          </div>
+
           <button
             onClick={nextImage}
             aria-label="Next Image"
             style={{
-              position: 'absolute', top: '50%', right: '10px',
-              transform: 'translateY(-50%)',
-              backgroundColor: 'rgba(0,0,0,0.5)', color: '#fff',
-              border: 'none', borderRadius: '50%', width: '30px', height: '30px',
-              cursor: 'pointer'
+              backgroundColor: 'transparent',
+              border: 'none',
+              fontSize: '2rem',
+              cursor: 'pointer',
+              color: '#0d6efd',
+              marginLeft: '10px',
+              userSelect: 'none'
             }}
           >&gt;</button>
+        </div>
 
-          <div style={{ textAlign: 'center', marginTop: '8px' }}>
-            {images.map((_, idx) => (
-              <span
-                key={idx}
-                onClick={() => selectImage(idx)}
-                style={{
-                  display: 'inline-block',
-                  width: '10px',
-                  height: '10px',
-                  margin: '0 5px',
-                  backgroundColor: idx === currentImageIndex ? '#007bff' : '#ccc',
-                  borderRadius: '50%',
-                  cursor: 'pointer'
-                }}
-                aria-label={`Select image ${idx + 1}`}
-              />
-            ))}
-          </div>
+        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          {images.map((_, idx) => (
+            <span
+              key={idx}
+              onClick={() => selectImage(idx)}
+              style={{
+                display: 'inline-block',
+                width: '8px',
+                height: '8px',
+                margin: '0 4px',
+                backgroundColor: idx === currentImageIndex ? '#0d6efd' : '#ccc',
+                borderRadius: '50%',
+                cursor: 'pointer'
+              }}
+              aria-label={`Select image ${idx + 1}`}
+            />
+          ))}
         </div>
 
         <p>{product.description}</p>
-        <h5 style={{ fontSize: '0.8rem', color: '#666' }}>Category: {product.category}</h5>
+        <h5 style={{ fontSize: '0.8rem', color: '#666' }}>
+          Category: {Array.isArray(product.category) ? product.category.join(', ') : product.category}
+        </h5>
         <p>Price: ₱{product.price.toFixed(2)}</p>
 
         <div style={{
