@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import coupons from '../data/coupons.json';
 
-function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
+function Checkout({ cart, setCart, onTransaction, usedCoupons, defaultContactInfo }) {
   const [purchased, setPurchased] = useState(false);
   const [boughtList, setBoughtList] = useState([]);
   const [couponCode, setCouponCode] = useState('');
@@ -11,11 +11,9 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
   const [appliedCouponCode, setAppliedCouponCode] = useState('---');
   const [couponMessage, setCouponMessage] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
-  
-  // Payment method state
+
   const [paymentMethod, setPaymentMethod] = useState('cod');
-  
-  // Contact information state
+
   const [contactInfo, setContactInfo] = useState({
     firstName: '',
     lastName: '',
@@ -25,37 +23,46 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
     postalCode: ''
   });
 
-  const shippingFee = 0; // You can make this dynamic
+  const [contactError, setContactError] = useState('');
+
+  useEffect(() => {
+    if (defaultContactInfo) {
+      setContactInfo({
+        firstName: defaultContactInfo.firstName || '',
+        lastName: defaultContactInfo.lastName || '',
+        houseStreet: defaultContactInfo.houseStreet || '',
+        barangay: defaultContactInfo.barangay || '',
+        city: defaultContactInfo.city || '',
+        postalCode: defaultContactInfo.postalCode || '',
+      });
+    }
+  }, [defaultContactInfo]);
+
+  const shippingFee = 0;
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const boughtTotal = boughtList.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const validateCoupon = (code) => {
     const coupon = coupons.find(c => c.code === code);
-    
     if (!coupon) {
       return { valid: false, message: 'Invalid coupon code', discount: 0 };
     }
-
     if (usedCoupons.includes(code)) {
       return { valid: false, message: 'Coupon has already been used', discount: 0 };
     }
-
     const currentDate = new Date();
     const startDate = new Date(coupon.startDate);
     const endDate = new Date(coupon.endDate);
-
     if (currentDate < startDate) {
       return { valid: false, message: 'Coupon is not yet active', discount: 0 };
     }
-
     if (currentDate > endDate) {
       return { valid: false, message: 'Coupon has expired', discount: 0 };
     }
-
-    return { 
-      valid: true, 
-      message: `Coupon applied! ₱${coupon.discount} discount`, 
-      discount: coupon.discount 
+    return {
+      valid: true,
+      message: `Coupon applied! ₱${coupon.discount} discount`,
+      discount: coupon.discount
     };
   };
 
@@ -67,9 +74,7 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
       setCouponApplied(false);
       return;
     }
-
     const result = validateCoupon(couponCode);
-    
     if (result.valid) {
       setAppliedDiscount(result.discount);
       setAppliedCouponCode(couponCode);
@@ -92,17 +97,19 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
   };
 
   const handleBuyProduct = () => {
-    // Validate contact information
     if (!contactInfo.firstName || !contactInfo.lastName || !contactInfo.houseStreet) {
-      alert('Please fill in required contact information');
+      setContactError('Please fill in required contact information');
       return;
     }
+    setContactError('');
 
     setBoughtList(cart);
     setPurchased(true);
     setCart([]);
+
     if (onTransaction) {
-      onTransaction(cart, appliedDiscount, appliedCouponCode);
+      // pass the contact info and payment method to be used for transaction history
+      onTransaction(cart, appliedDiscount, appliedCouponCode, contactInfo, paymentMethod);
     }
   };
 
@@ -117,7 +124,6 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
     }));
   };
 
-  // Purchase confirmation view
   if (purchased) {
     return (
       <div className="container mt-4">
@@ -160,7 +166,6 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
     );
   }
 
-  // Empty cart view
   if (cart.length === 0) {
     return (
       <div className="container mt-4">
@@ -172,15 +177,12 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
     );
   }
 
-  // Main checkout view
   return (
     <div className="container-fluid mt-4">
       <h2 className="mb-4">Payment Transaction</h2>
-      
+
       <div className="row">
-        {/* Left Column - Contact Info & Payment Method */}
         <div className="col-md-7">
-          {/* Contact Information */}
           <div className="card mb-4">
             <div className="card-body">
               <h5 className="card-title mb-3">Contact Information</h5>
@@ -246,14 +248,14 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
                   />
                 </div>
               </div>
+              {contactError && <div className="text-danger mt-2">{contactError}</div>}
             </div>
           </div>
 
-          {/* Payment Method */}
           <div className="card">
             <div className="card-body">
               <h5 className="card-title mb-3">Payment Method</h5>
-              
+
               <div className="form-check mb-3 p-3 border rounded">
                 <input
                   className="form-check-input"
@@ -305,20 +307,18 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
           </div>
         </div>
 
-        {/* Right Column - Order Summary */}
         <div className="col-md-5">
           <div className="card">
             <div className="card-body">
               <h5 className="card-title mb-3">Order Summary</h5>
-              
-              {/* Product List */}
+
               {cart.map((item) => (
                 <div key={item.id} className="d-flex align-items-center mb-3 pb-3 border-bottom">
-                  <div 
+                  <div
                     className="bg-secondary text-white d-flex align-items-center justify-content-center me-3"
                     style={{ width: '60px', height: '60px', borderRadius: '8px', fontSize: '10px' }}
                   >
-                    Product<br/>Image
+                    Product<br />Image
                   </div>
                   <div className="flex-grow-1">
                     <div className="fw-bold">{item.name}</div>
@@ -328,7 +328,6 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
                 </div>
               ))}
 
-              {/* Redeem Code */}
               <div className="mb-3">
                 <label className="form-label">Redeem Code</label>
                 <div className="input-group">
@@ -363,7 +362,6 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
                 )}
               </div>
 
-              {/* Price Summary */}
               <div className="border-top pt-3">
                 <div className="d-flex justify-content-between mb-2">
                   <span>Subtotal:</span>
@@ -385,7 +383,6 @@ function Checkout({ cart, setCart, onTransaction, usedCoupons }) {
                 </div>
               </div>
 
-              {/* Place Order Button */}
               <button
                 className="btn btn-dark w-100 mt-3"
                 onClick={handleBuyProduct}

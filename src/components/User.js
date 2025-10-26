@@ -1,47 +1,54 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
 
 function User({
-  userName,
-  setUserName,
-  paymentMethod,
-  setPaymentMethod,
-  deliveryAddress,
-  setDeliveryAddress,
+  firstName, setFirstName,
+  lastName, setLastName,
+  houseStreet, setHouseStreet,
+  barangay, setBarangay,
+  city, setCity,
+  postalCode, setPostalCode,
   transactions
 }) {
   const [edit, setEdit] = useState(false);
-  const [formName, setFormName] = useState(userName);
-  const [formPaymentMethod, setFormPaymentMethod] = useState(paymentMethod);
-  const [formAddress, setFormAddress] = useState(deliveryAddress);
-
+  const [formFirstName, setFormFirstName] = useState(firstName);
+  const [formLastName, setFormLastName] = useState(lastName);
+  const [formHouseStreet, setFormHouseStreet] = useState(houseStreet);
+  const [formBarangay, setFormBarangay] = useState(barangay);
+  const [formCity, setFormCity] = useState(city);
+  const [formPostalCode, setFormPostalCode] = useState(postalCode);
 
   const handleSave = (e) => {
     e.preventDefault();
-    setUserName(formName.trim() === "" ? "Unnamed" : formName);
-    setPaymentMethod(formPaymentMethod);
-    setDeliveryAddress(formAddress.trim() === "" ? "No address" : formAddress);
+    setFirstName(formFirstName.trim() === "" ? "No first name" : formFirstName);
+    setLastName(formLastName.trim() === "" ? "No last name" : formLastName);
+    setHouseStreet(formHouseStreet.trim() === "" ? "No house/street" : formHouseStreet);
+    setBarangay(formBarangay.trim() === "" ? "No barangay" : formBarangay);
+    setCity(formCity.trim() === "" ? "No city" : formCity);
+    setPostalCode(formPostalCode.trim() === "" ? "No postal code" : formPostalCode);
     setEdit(false);
   };
-
 
   const handleCancel = () => {
-    setFormName(userName);
-    setFormPaymentMethod(paymentMethod);
-    setFormAddress(deliveryAddress);
+    setFormFirstName(firstName);
+    setFormLastName(lastName);
+    setFormHouseStreet(houseStreet);
+    setFormBarangay(barangay);
+    setFormCity(city);
+    setFormPostalCode(postalCode);
     setEdit(false);
   };
-
 
   return (
     <div className="text-center">
       <h1 className="fw-bold mt-4">Account</h1>
       {!edit ? (
         <div>
-          <p>Name: {userName}</p>
-          <p>Payment Option: {paymentMethod}</p>
-          <p>Delivery Address: {deliveryAddress}</p>
+          <p>First Name: {firstName}</p>
+          <p>Last Name: {lastName}</p>
+          <p>House No./Street: {houseStreet}</p>
+          <p>Barangay: {barangay}</p>
+          <p>City: {city}</p>
+          <p>Postal Code: {postalCode}</p>
           <button className="btn btn-secondary mb-3" onClick={() => setEdit(true)}>
             Edit Details
           </button>
@@ -59,46 +66,79 @@ function User({
           onSubmit={handleSave}
         >
           <div className="mb-2">
-            <label>Name: </label>
+            <label>First Name</label>
             <input
               className="form-control"
               type="text"
-              value={formName}
-              onChange={e => setFormName(e.target.value)}
+              value={formFirstName}
+              onChange={e => setFormFirstName(e.target.value)}
               required
             />
           </div>
           <div className="mb-2">
-            <label>Payment Method: </label>
-            <select
-              className="form-control"
-              value={formPaymentMethod}
-              onChange={e => setFormPaymentMethod(e.target.value)}
-              required
-            >
-              <option value="GCash">GCash</option>
-              <option value="Cash on Delivery">Cash on Delivery</option>
-            </select>
-          </div>
-          <div className="mb-2">
-            <label>Delivery Address: </label>
+            <label>Last Name</label>
             <input
               className="form-control"
               type="text"
-              value={formAddress}
-              onChange={e => setFormAddress(e.target.value)}
+              value={formLastName}
+              onChange={e => setFormLastName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label>House No./Street</label>
+            <input
+              className="form-control"
+              type="text"
+              value={formHouseStreet}
+              onChange={e => setFormHouseStreet(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label>Barangay</label>
+            <input
+              className="form-control"
+              type="text"
+              value={formBarangay}
+              onChange={e => setFormBarangay(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label>City</label>
+            <input
+              className="form-control"
+              type="text"
+              value={formCity}
+              onChange={e => setFormCity(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label>Postal Code</label>
+            <input
+              className="form-control"
+              type="text"
+              value={formPostalCode}
+              onChange={e => setFormPostalCode(e.target.value)}
               required
             />
           </div>
           <button type="submit" className="btn btn-success me-2">
             Save
           </button>
-          <button type="button" className="btn btn-outline-secondary" onClick={handleCancel}>
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={handleCancel}
+          >
             Cancel
           </button>
         </form>
       )}
-      <p className="mt-4">Transaction History:</p>
+
+      <h3 className="mt-4">Transaction History</h3>
       <div style={{ overflowX: "auto" }}>
         {transactions.length === 0 ? (
           <p>No transactions yet.</p>
@@ -107,7 +147,7 @@ function User({
             borderCollapse: "collapse",
             margin: "0 auto",
             textAlign: "left",
-            minWidth: "400px"
+            minWidth: "600px"
           }}>
             <thead>
               <tr style={{ backgroundColor: "#f2f2f2" }}>
@@ -141,6 +181,5 @@ function User({
     </div>
   );
 }
-
 
 export default User;
