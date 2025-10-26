@@ -1,4 +1,5 @@
 import React from 'react';
+import products from '../data/products.json';
 
 function CheckoutSummary({
   cart,
@@ -12,9 +13,17 @@ function CheckoutSummary({
   finalTotal,
   onPlaceOrder
 }) {
-
   const shippingFee = 50;
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  // Helper function to get product image from products.json
+  const getProductImage = (productId) => {
+    const product = products.find((p) => p.id === productId);
+    if (product && product.images && product.images.length > 0) {
+      return product.images[0];
+    }
+    return null;
+  };
 
   return (
     <div className="col-md-5">
@@ -22,21 +31,32 @@ function CheckoutSummary({
         <div className="card-body">
           <h5 className="card-title mb-3">Order Summary</h5>
 
-          {cart.map((item) => (
-            <div key={item.id} className="d-flex align-items-center mb-3 pb-3 border-bottom">
-              <div
-                className="bg-secondary text-white d-flex align-items-center justify-content-center me-3"
-                style={{ width: '60px', height: '60px', borderRadius: '8px', fontSize: '10px' }}
-              >
-                Product<br />Image
+          {cart.map((item) => {
+            const imageUrl = getProductImage(item.id);
+            return (
+              <div key={item.id} className="d-flex align-items-center mb-3 pb-3 border-bottom">
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt={item.name}
+                    style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover', marginRight: '12px' }}
+                  />
+                ) : (
+                  <div
+                    className="bg-secondary text-white d-flex align-items-center justify-content-center me-3"
+                    style={{ width: '60px', height: '60px', borderRadius: '8px', fontSize: '10px' }}
+                  >
+                    Product<br />Image
+                  </div>
+                )}
+                <div className="flex-grow-1">
+                  <div className="fw-bold">{item.name}</div>
+                  <div className="text-muted small">Qty: {item.quantity}</div>
+                </div>
+                <div className="fw-bold">₱{item.price.toFixed(2)}</div>
               </div>
-              <div className="flex-grow-1">
-                <div className="fw-bold">{item.name}</div>
-                <div className="text-muted small">Qty: {item.quantity}</div>
-              </div>
-              <div className="fw-bold">₱{item.price.toFixed(2)}</div>
-            </div>
-          ))}
+            );
+          })}
 
           <div className="mb-3">
             <label className="form-label">Redeem Code</label>
@@ -50,17 +70,11 @@ function CheckoutSummary({
                 disabled={couponApplied}
               />
               {!couponApplied ? (
-                <button
-                  className="btn btn-outline-secondary"
-                  onClick={handleApplyCoupon}
-                >
+                <button className="btn btn-outline-secondary" onClick={handleApplyCoupon}>
                   ✓
                 </button>
               ) : (
-                <button
-                  className="btn btn-outline-danger"
-                  onClick={handleRemoveCoupon}
-                >
+                <button className="btn btn-outline-danger" onClick={handleRemoveCoupon}>
                   ✗
                 </button>
               )}
