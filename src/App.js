@@ -10,21 +10,25 @@ import ProductDetails from './components/ProductDetails';
 import Checkout from './components/Checkout';
 import User from './components/User';
 
-
 function App() {
   const [cart, setCart] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [usedCoupons, setUsedCoupons] = useState([]);
-  // User details in state
-  const [userName, setUserName] = useState("Cagayan");
-  const [paymentMethod, setPaymentMethod] = useState("GCash");
-  const [deliveryAddress, setDeliveryAddress] = useState("dyan sa may kanto");
 
+  // User details state (initial defaults)
+  const [firstName, setFirstName] = useState("Juan");
+  const [lastName, setLastName] = useState("Dela Cruz");
+  const [houseStreet, setHouseStreet] = useState("123 Main St");
+  const [barangay, setBarangay] = useState("Barangay 1");
+  const [city, setCity] = useState("Manila");
+  const [postalCode, setPostalCode] = useState("1000");
+
+  // Default payment method (will improve later)
+  const defaultPaymentMethod = "GCash";
 
   useEffect(() => {
     document.title = "Docker Motorsports";
   }, []);
-
 
   const addToCart = (productToAdd, quantityToAdd = 1) => {
     const existingProduct = cart.find(item => item.id === productToAdd.id);
@@ -39,12 +43,24 @@ function App() {
     }
   };
 
-
-  const handleTransaction = (orderItems, discount = 0, couponCode = '---') => {
+  // Updated to accept contact info from Checkout and use that for address
+  const handleTransaction = (
+    orderItems,
+    discount = 0,
+    couponCode = '---',
+    contactInfo = null,
+    paymentMethod = defaultPaymentMethod
+  ) => {
     const orderNumber = transactions.length + 1;
     const price = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const totalPrice = price - discount;
     const dateTime = new Date().toLocaleString();
+
+    // Use passed contactInfo if available, else fallback to user defaults
+    const deliveryAddress = contactInfo
+      ? `${contactInfo.houseStreet}, ${contactInfo.barangay}, ${contactInfo.city}, ${contactInfo.postalCode}`
+      : `${houseStreet}, ${barangay}, ${city}, ${postalCode}`;
+
     setTransactions([
       ...transactions,
       {
@@ -57,35 +73,54 @@ function App() {
         deliveryAddress,
         dateTime,
         items: orderItems,
-      }
+      },
     ]);
 
-    // Mark coupon as used if one was applied
     if (couponCode !== '---') {
       setUsedCoupons([...usedCoupons, couponCode]);
     }
   };
 
-
   return (
     <Router>
-      <div className="d-flex flex-column min-vh-100">
+      <div className="app-container">
         <NavBar />
-        <main className="main-content flex-fill p-4">
+        <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
-            <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
             <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
-            <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} onTransaction={handleTransaction} usedCoupons={usedCoupons} />} />
+            <Route path="/details/:id" element={<ProductDetails addToCart={addToCart} />} />
+            <Route path="/checkout" element={
+              <Checkout
+                cart={cart}
+                setCart={setCart}
+                onTransaction={handleTransaction}
+                usedCoupons={usedCoupons}
+                defaultContactInfo={{
+                  firstName,
+                  lastName,
+                  houseStreet,
+                  barangay,
+                  city,
+                  postalCode,
+                }}
+              />
+            } />
             <Route path="/user" element={
               <User
-                userName={userName}
-                setUserName={setUserName}
-                paymentMethod={paymentMethod}
-                setPaymentMethod={setPaymentMethod}
-                deliveryAddress={deliveryAddress}
-                setDeliveryAddress={setDeliveryAddress}
+                firstName={firstName}
+                setFirstName={setFirstName}
+                lastName={lastName}
+                setLastName={setLastName}
+                houseStreet={houseStreet}
+                setHouseStreet={setHouseStreet}
+                barangay={barangay}
+                setBarangay={setBarangay}
+                city={city}
+                setCity={setCity}
+                postalCode={postalCode}
+                setPostalCode={setPostalCode}
                 transactions={transactions}
               />
             } />
@@ -95,6 +130,5 @@ function App() {
     </Router>
   );
 }
-
 
 export default App;
