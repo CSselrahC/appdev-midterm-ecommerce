@@ -18,10 +18,10 @@ function App() {
   // User details state (initial defaults)
   const [firstName, setFirstName] = useState("Juan");
   const [lastName, setLastName] = useState("Dela Cruz");
-  const [houseStreet, setHouseStreet] = useState("123 Main St");
-  const [barangay, setBarangay] = useState("Barangay 1");
-  const [city, setCity] = useState("Manila");
-  const [postalCode, setPostalCode] = useState("1000");
+  const [houseStreet, setHouseStreet] = useState("Blk 3 Lot 25 Dangal St.");
+  const [barangay, setBarangay] = useState("Pulo");
+  const [city, setCity] = useState("Cabuyao City");
+  const [postalCode, setPostalCode] = useState("4025");
 
   // Default payment method (will improve later)
   const defaultPaymentMethod = "GCash";
