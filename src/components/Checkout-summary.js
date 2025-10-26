@@ -12,6 +12,10 @@ function CheckoutSummary({
   finalTotal,
   onPlaceOrder
 }) {
+
+  const shippingFee = 50; // Fixed shipping fee
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
   return (
     <div className="col-md-5">
       <div className="card">
@@ -71,7 +75,7 @@ function CheckoutSummary({
           <div className="border-top pt-3">
             <div className="d-flex justify-content-between mb-2">
               <span>Subtotal:</span>
-              <span>₱{cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}</span>
+              <span>₱{subtotal.toFixed(2)}</span>
             </div>
             {appliedDiscount > 0 && (
               <div className="d-flex justify-content-between mb-2 text-success">
@@ -79,9 +83,13 @@ function CheckoutSummary({
                 <span>-₱{appliedDiscount.toFixed(2)}</span>
               </div>
             )}
+            <div className="d-flex justify-content-between mb-2">
+              <span>Shipping Fee:</span>
+              <span>₱{shippingFee.toFixed(2)}</span>
+            </div>
             <div className="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
               <span>Total:</span>
-              <span>₱{finalTotal.toFixed(2)}</span>
+              <span>₱{(subtotal - appliedDiscount + shippingFee).toFixed(2)}</span>
             </div>
           </div>
 

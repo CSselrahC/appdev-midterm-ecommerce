@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 function HomePage() {
   return (
     <div className="container mt-4">
-      {/* 🔍 Top bar: Search + Icons beside it */}
       <div className="d-flex align-items-center mb-4">
         {/* Search bar */}
         <div
@@ -29,7 +28,7 @@ function HomePage() {
           />
         </div>
 
-        {/* Right icons beside search bar */}
+        {/* Icons */}
         <div className="d-flex align-items-center gap-4 ms-3">
           <i className="ri-shopping-cart-line fs-5" style={{ cursor: 'pointer' }}></i>
           <i className="ri-user-line fs-5" style={{ cursor: 'pointer' }}></i>
@@ -37,7 +36,7 @@ function HomePage() {
         </div>
       </div>
 
-      {/* 🧾 Advertisement section */}
+      {/* Advertisement section */}
       <div
         className="border bg-light d-flex align-items-center justify-content-center rounded mb-5"
         style={{ height: '180px' }}
@@ -45,7 +44,7 @@ function HomePage() {
         <h5 className="text-secondary">Advertisement</h5>
       </div>
 
-      {/* ⭐ Featured Products */}
+      {/* Featured Products */}
       <h5 className="text-center fw-bold mb-4">FEATURED PRODUCTS</h5>
 
       <div className="row justify-content-center">
@@ -84,7 +83,7 @@ function HomePage() {
                 <p className="mb-1 text-muted" style={{ fontSize: '0.9rem' }}>₱0.00</p>
                 <p className="text-muted" style={{ fontSize: '0.8rem' }}>0 sold</p>
 
-                {/* 🛒 Action Buttons */}
+                {/* Action Buttons */}
                 <div className="d-flex gap-2 mt-2">
                   <button className="btn btn-dark flex-fill" style={{ borderRadius: '8px' }}>BUY</button>
                   <button

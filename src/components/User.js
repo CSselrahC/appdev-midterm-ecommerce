@@ -16,7 +16,6 @@ function User({
   const [formBarangay, setFormBarangay] = useState(barangay);
   const [formCity, setFormCity] = useState(city);
   const [formPostalCode, setFormPostalCode] = useState(postalCode);
-
   const handleSave = (e) => {
     e.preventDefault();
     setFirstName(formFirstName.trim() === "" ? "No first name" : formFirstName);
@@ -27,7 +26,6 @@ function User({
     setPostalCode(formPostalCode.trim() === "" ? "No postal code" : formPostalCode);
     setEdit(false);
   };
-
   const handleCancel = () => {
     setFormFirstName(firstName);
     setFormLastName(lastName);

@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 function Cart({ cart, setCart }) {
   const navigate = useNavigate();
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -45,7 +44,7 @@ function Cart({ cart, setCart }) {
   return (
     <div className="container mt-4">
       <h2><i className="ri-shopping-cart-line me-2"></i>Shopping Cart</h2>
-      
+
       {cart.length === 0 ? (
         <div className="alert alert-info mt-3">
           <p className="mb-0">Your cart is empty.</p>
@@ -120,8 +119,8 @@ function Cart({ cart, setCart }) {
           <div className="d-flex justify-content-end mt-3">
             <div className="text-end">
               <h4>Total: <strong>₱{total.toFixed(2)}</strong></h4>
-              <button 
-                onClick={handleCheckout} 
+              <button
+                onClick={handleCheckout}
                 className="btn btn-dark btn-lg mt-2"
               >
                 Proceed to Checkout
@@ -133,6 +132,5 @@ function Cart({ cart, setCart }) {
     </div>
   );
 }
-
 
 export default Cart;
