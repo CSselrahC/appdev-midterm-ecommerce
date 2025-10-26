@@ -81,7 +81,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList addToCart={addToCart} />} />
             <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
-            <Route path="/details/:id" element={<ProductDetails addToCart={addToCart} />} />
+            <Route path="/details/:id" element={<ProductDetails cart={cart} setCart={setCart} />} />
             <Route path="/checkout" element={
               <Checkout
                 cart={cart}
@@ -98,7 +98,6 @@ function App() {
                 }}
               />
             } />
-
             <Route path="/user" element={
               <User
                 firstName={firstName}
