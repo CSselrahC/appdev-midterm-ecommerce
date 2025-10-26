@@ -83,9 +83,9 @@ function ProductDetails({ cart, setCart }) {
         <h3>{product.name}</h3>
 
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', maxWidth: '400px', margin: 'auto', position: 'relative', marginBottom: '1rem' }}>
-          
+
           {/* Show arrows only if product has more than 1 image */}
-          {hasImages && product.images.length > 1 && 
+          {hasImages && product.images.length > 1 &&
             <button
               onClick={prevImage}
               aria-label="Previous Image"
